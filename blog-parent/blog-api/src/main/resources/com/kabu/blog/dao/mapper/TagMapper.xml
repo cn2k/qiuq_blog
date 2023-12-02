@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--MyBatis配置文件-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kabu.blog.dao.mapper.TagMapper">
+    <!--List<Tag> findTagsByArticleId(Long articleId);-->
+    <!--类里面的属性值为tagName 实际为tag_name-->
+    <select id="findTagsByArticleId" parameterType="long" resultType="com.kabu.blog.dao.pojo.Tag">
+        select id,avatar,tag_name as tagName from ms_tag
+        where id in (select tag_id from ms_article_tag where article_id=#{articleId})
+    </select>
+    <!--查询最热的标签前五条-->
+    <!--List<Long> findHostTagIds(int limits);-->
+    <select id="findHostTagIds" parameterType="int" resultType="java.lang.Long">
+        select tag_id from ms_article_tag group by tag_id order by count(*) desc limit #{limits}
+    </select>
+    <!--根据tag的id来查询标签名称-->
+    <!--List<Tag> findTagsByTagIds(List<Long> tagids);-->
+    <select id="findTagsByTagIds" parameterType="long" resultType="com.kabu.blog.dao.pojo.Tag">
+        select id,tag_name as tagName from ms_tag
+        where id in
+        <foreach collection="tagids" item="tagid" separator="," open="(" close=")">
+            #{tagid}
+        </foreach>
+    </select>
+</mapper>

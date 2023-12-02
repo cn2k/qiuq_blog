@@ -1,0 +1,5 @@
+qiniu:
+  accessKey:
+    #七牛云的accessKey
+  accessSecretKey:
+    #七牛云的accessSecretKey
